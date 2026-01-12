@@ -31,12 +31,20 @@ const MTSidebar = ({
   const currentRoute = usePathname();
   const router = useRouter();
   // Normalize route by removing trailing slash for consistent comparison
-  const normalizedRoute = currentRoute?.endsWith('/') ? currentRoute.slice(0, -1) : currentRoute;
+  const normalizedRoute = currentRoute?.endsWith("/")
+    ? currentRoute.slice(0, -1)
+    : currentRoute;
   const tools = [
+    { name: "Main Tool", href: "/tools/main-tool" },
     { name: "Paraphraser Tool", href: "/tools/paraphraser-tool" },
     { name: "Summarizer Tool", href: "/tools/summarizer-tool" },
     { name: "Thesis Generator Tool", href: "/tools/thesis-generator-tool" },
     { name: "Essay Outline Tool", href: "/tools/essay-outline-tool" },
+    { name: "Essay Title Generator", href: "/tools/essay-title" },
+    { name: "Research Question Generator", href: "/tools/research-question" },
+    { name: "Pythagoras Equation Solver", href: "/tools/pythagoras-solver" },
+    { name: "Citation Tool", href: "/tools/citation-tool" },
+
     // { name: "Syllabus Importer", href: "/tools/syllabus-importer" },
   ];
   const [showTools, setShowTools] = useState(false);
