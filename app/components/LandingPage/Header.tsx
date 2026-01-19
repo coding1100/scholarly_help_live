@@ -11,6 +11,7 @@ import Phone from "@/app/assets/Icons/phone.svg";
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
+  const [mobileActiveIndex, setMobileActiveIndex] = useState<number | null>(null);
 
   const navItems = [
     {
@@ -213,31 +214,37 @@ export default function Header() {
   ];
 
   return (
-    <header className="sticky top-0 bg-white shadow-md z-50 relative max-[1020px]:py-3">
+    <header className="sticky top-0 bg-white z-[9999] relative max-[1020px]:py-3">
       {/* Header Top Bar */}
       <div className="max-w-7xl mx-auto max-[1320px]:px-8 flex items-center justify-between pt-2 px-6">
         {/* Logo */}
+        <button
+          onClick={() => setMobileOpen((prev) => !prev)}
+          className="min-[1200px]:hidden text-gray-700"
+        >
+          {mobileOpen ? <X size={28} color="#3e42b3" /> : <Menu size={28} color="#3e42b3" />}
+        </button>
         <Link href="/">
           <Image
             src={LogoSmall}
-            alt="logo"
+            alt="Scholarly Help Logo"
             className="max-[480px]:block hidden max-w-[30px] min-w-[30px]"
+            width={30}
+            height={30}
+            priority
           />
           <Image
             src={LogoNormal}
-            alt=""
+            alt="Scholarly Help"
             className="min-[480px]:block hidden max-w-[142px] min-w-[142px]"
+            width={142}
+            height={40}
+            priority
           />
-          {/* <Logo /> */}
         </Link>
 
         {/* Mobile Toggle */}
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="min-[1200px]:hidden text-gray-700"
-        >
-          {mobileOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
+        
 
         {/* Desktop Navigation */}
         <nav className="hidden min-[1200px]:flex items-center font-medium text-gray-700 ">
@@ -332,49 +339,81 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
-      {mobileOpen && (
-        <div className="min-[1200px]:hidden bg-white border-t shadow-inner max-h-[90vh] overflow-auto">
-          <ul className="flex flex-col divide-y ">
+      {/* Mobile Navigation - full-width dropdown under header with smooth transition and outside click close */}
+      <div
+        className={`min-[1200px]:hidden fixed inset-0 z-40 transition-opacity duration-300 ease-in-out ${
+          mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={() => {
+          setMobileOpen(false);
+          setMobileActiveIndex(null);
+        }}
+      >
+        <div
+          className={`absolute inset-x-0 top-[60px] mx-auto max-w-7xl bg-white border-t shadow-lg rounded-b-2xl max-h-[70vh] overflow-auto transform transition-transform duration-300 ease-in-out ${
+            mobileOpen ? "translate-y-0" : "-translate-y-4"
+          }`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <ul className="flex flex-col divide-y">
             {navItems.map((item, index) => (
-              <li key={index} className="p-3 ">
+              <li key={index} className="p-3">
                 {item.submenu ? (
-                  <details className="group">
-                    <summary className="flex justify-between items-center cursor-pointer font-medium">
+                  <details
+                    className="group"
+                    open={mobileActiveIndex === index}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setMobileActiveIndex(
+                        mobileActiveIndex === index ? null : index
+                      );
+                    }}
+                  >
+                    <summary className="flex justify-between items-center cursor-pointer font-medium text-[#1e1e1e]">
                       {item.title}
                       <ChevronDown
                         size={18}
-                        className="transition group-open:rotate-180"
+                        className="transition-transform duration-300 ease-in-out group-open:rotate-180"
                       />
                     </summary>
-                    <ul className="mt-2 pl-3 border-l border-gray-200 space-y-1">
-                      {item.submenu.map((sub, idx) => (
-                        <li key={idx}>
-                          <div className="mb-2">
-                            <span className="font-medium text-gray-800">
-                              {sub.title}
-                            </span>
-                            <ul className="ml-2 mt-1 space-y-1">
-                              {sub.links.map((link, linkIdx) => (
-                                <li key={linkIdx}>
-                                  <Link
-                                    href={link.href}
-                                    className="block text-gray-600 hover:text-blue-600 py-1"
-                                  >
-                                    {link.name}
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
+                    <div className="mt-2 overflow-hidden transition-all duration-300 ease-in-out max-h-0 group-open:max-h-fit">
+                      <ul className="pl-3 border-l border-gray-200 space-y-1">
+                        {item.submenu.map((sub, idx) => (
+                          <li key={idx}>
+                            <div className="mb-2">
+                              <span className="font-medium text-gray-800">
+                                {sub.title}
+                              </span>
+                              <ul className="ml-2 mt-1 space-y-1">
+                                {sub.links.map((link, linkIdx) => (
+                                  <li key={linkIdx}>
+                                    <Link
+                                      href={link.href}
+                                      className="block text-gray-600 hover:text-blue-600 py-1"
+                                      onClick={() => {
+                                        setMobileOpen(false);
+                                        setMobileActiveIndex(null);
+                                      }}
+                                    >
+                                      {link.name}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </details>
                 ) : (
                   <Link
                     href={item.href || "#"}
                     className="block text-gray-700 hover:text-blue-600"
+                    onClick={() => {
+                      setMobileOpen(false);
+                      setMobileActiveIndex(null);
+                    }}
                   >
                     {item.title}
                   </Link>
@@ -383,7 +422,7 @@ export default function Header() {
             ))}
           </ul>
         </div>
-      )}
+      </div>
     </header>
   );
 }
