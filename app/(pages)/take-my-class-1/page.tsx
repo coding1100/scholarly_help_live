@@ -7,8 +7,7 @@ import Subjects from "@/app/components/LandingPage/Subjects";
 import AcademicPartners from "@/app/components/LandingPage/AcademicPartners";
 import GetQoute from "@/app/components/LandingPage/GetQoute";
 import Faq from "@/app/components/LandingPage/Faq";
-import CustomerReviews from "@/app/components/LandingPage/CustomerReviews";
-import CardCarousel from "@/app/components/LandingPage/CardCarousel";
+import { CardCarousel, CustomerReviews } from "@/app/components/LandingPage/LazySections";
 import GuaranteedBlock from "@/app/components/LandingPage/GuaranteedBlock";
 import Description from "@/app/components/LandingPage/Description";
 import Ratings from "@/app/components/LandingPage/Ratings";
@@ -85,10 +84,10 @@ const TakeMyClass1 = async () => {
       <MainLayout>
         <HeroSection />
         <Ratings />
-        <WhySlider />
         <CardCarousel />
         <Description />
         <GuaranteedBlock />
+        <WhySlider />
         <CustomerReviews />
         <ProcessSection />
         <Success />

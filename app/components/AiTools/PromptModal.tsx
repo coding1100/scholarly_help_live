@@ -11,16 +11,13 @@ interface PromptModalProps {
   isOpen: boolean;
   onClose: () => void;
   onStartWriting: () => void; // New prop to handle the action
-  setOutlineResponse?: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const PromptModal: React.FC<PromptModalProps> = ({
   isOpen,
   onClose,
   onStartWriting,
-  setOutlineResponse,
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
   const [selectedOutline, setSelectedOutline] = useState("standard");
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [input, setInput] = useState("");
@@ -51,61 +48,20 @@ const PromptModal: React.FC<PromptModalProps> = ({
     setSelectedOutline(value);
   };
 
-  // const handleStartWritingButtonClick = async () => {
-  //   const headingType =
-  //     selectedOutline === "standard"
-  //       ? "descriptive"
-  //       : selectedOutline === "smart"
-  //       ? "descriptive"
-  //       : "not_provided";
-  //   setIsLoading(true);
-  //   try {
-  //     const response = await axios.post(
-  //       `${process.env.NEXT_PUBLIC_NGROX_URL}/tools/essay-outline`,
-  //       {
-  //         topic: input,
-  //         essay_type: headingType,
-  //         essay_level: "post graduate",
-  //       },
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-  //     // Only store sections, not subsections
-  //     const sectionsOnly = response.data.data.outline.filter(
-  //       (item: any) => item.type === "section"
-  //     );
-  //     if (!sectionsOnly || sectionsOnly.length === 0) {
-  //       console.warn(
-  //         "Essay outline response is empty:",
-  //         response.data.data.outline
-  //       );
-  //     }
-  //     setOutlineResponse(sectionsOnly);
-  //     console.log("response essay outline", outlineResponse);
-  //   } catch (error) {
-  //     // Silently ignore for now as per request: no extra changes
-  //   } finally {
-  //     onClose();
-  //     onStartWriting();
-  //     setIsLoading(false);
-  //   }
-  // };
   const handleStartWritingButtonClick = async () => {
     const headingType =
-      selectedOutline === "none" ? "not_provided" : "descriptive";
-    setIsLoading(true);
+      selectedOutline === "standard"
+        ? "standard"
+        : selectedOutline === "smart"
+        ? "small"
+        : "not_provided";
 
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_NGROX_URL}/tools/essay-outline`,
         {
           topic: input,
-          essay_type: headingType,
-          essay_level: "post graduate",
+          heading_type: headingType,
         },
         {
           headers: {
@@ -114,29 +70,14 @@ const PromptModal: React.FC<PromptModalProps> = ({
           },
         }
       );
-
-      // Extract the section titles (strings) based on your image structure
-      const sectionTitles = response.data.data.outline.map(
-        (item: any) => item.section
-      );
-
-      if (!sectionTitles || sectionTitles.length === 0) {
-        console.warn("No sections found in the response");
-      }
-
-      // Update state only if setOutlineResponse is provided
-      setOutlineResponse?.(sectionTitles);
-
-      // Log the local constant to see immediate results
-      console.log("Sections captured:", sectionTitles);
     } catch (error) {
-      console.error("Error fetching outline:", error);
+      // Silently ignore for now as per request: no extra changes
     } finally {
       onClose();
       onStartWriting();
-      setIsLoading(false);
     }
   };
+
   const handleToggleSettings = () => {
     setIsSettingsOpen((prev) => !prev);
   };
@@ -233,41 +174,12 @@ const PromptModal: React.FC<PromptModalProps> = ({
         {isSettingsOpen ? <LiaFileAltSolid /> : <TbSettings />}
         <span>{isSettingsOpen ? "Write prompt" : "Additional settings"}</span>
       </div>
-      {isLoading ? (
-        <button
-          className="py-2 px-4 bg-gray-200 text-gray-900 rounded font-medium flex items-center justify-center gap-2 opacity-70 cursor-not-allowed"
-          disabled
-        >
-          <svg
-            className="animate-spin h-5 w-5 text-blue-500"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            ></circle>
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-            ></path>
-          </svg>
-          Loading...
-        </button>
-      ) : (
-        <button
-          className="py-2 px-4 bg-gray-200 text-gray-900 rounded font-medium hover:bg-gray-300"
-          onClick={handleStartWritingButtonClick}
-        >
-          Start Writing
-        </button>
-      )}
+      <button
+        className="py-2 px-4 bg-gray-200 text-gray-900 rounded font-medium hover:bg-gray-300"
+        onClick={handleStartWritingButtonClick}
+      >
+        Start Writing
+      </button>
     </div>
   );
 

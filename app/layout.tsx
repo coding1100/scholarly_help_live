@@ -1,17 +1,18 @@
-import { GoogleTagManager } from "@next/third-parties/google";
 import { Poppins } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { Metadata } from "next";
 import ClientScripts from "./components/ClientScripts";
 
-// Optimize font loading - only load weights actually used
+// Optimize font loading - next/font self-hosts fonts (NO CDN calls)
 const poppins = Poppins({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-poppins",
-  weight: ["400", "500", "600", "700"], // Only load needed weights
-  preload: true,
+  weight: ["400", "500", "600", "700"],
+  preload: false,
+  fallback: ["system-ui", "-apple-system", "Segoe UI", "Arial", "sans-serif"],
+  adjustFontFallback: true,
 });
 
 export const metadata: Metadata = {
@@ -25,39 +26,69 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={poppins.variable}>
       <head>
-        {/* Preconnect to critical domains for faster loading */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Force HTTPS for all resources in production only */}
+        {process.env.NODE_ENV === "production" && (
+          <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+        )}
+
+        {/* CRITICAL: Preload LCP image to eliminate 4.6s resource load delay */}
+        <link
+          rel="preload"
+          as="image"
+          href="/images/Hero-Group-195.png"
+          type="image/png"
+          fetchPriority="high"
+        />
+
+        {/* Preconnect only to non-font third-party domains */}
         <link rel="preconnect" href="https://www.googletagmanager.com" />
-        
-        {/* DNS prefetch for third-party resources */}
+
+        {/* DNS prefetch for resources loaded later */}
         <link rel="dns-prefetch" href="https://accounts.google.com" />
         <link rel="dns-prefetch" href="https://cdn.livechatinc.com" />
+        <link rel="dns-prefetch" href="https://script.crazyegg.com" />
       </head>
       <body className={poppins.className} suppressHydrationWarning={true}>
-        {children}
-        
-        {/* Defer Google Sign-In script - load after page */}
+        <main id="main-content">{children}</main>
+
+        {/* 
+         * PERFORMANCE: All scripts use lazyOnload to minimize main thread work
+         * This defers all non-critical scripts until after page is fully interactive
+         */}
+
+        {/* Google Sign-In - lazy load */}
         <Script
           src="https://accounts.google.com/gsi/client"
           strategy="lazyOnload"
         />
-        
-        {/* GTM - already optimized by Next.js */}
-        <GoogleTagManager gtmId="GTM-5ZHV46X" />
-        
-        {/* Schema.org - use afterInteractive instead of beforeInteractive */}
+
+        {/* GTM - use lazyOnload instead of default to reduce main thread work */}
+        <Script
+          id="gtm-script"
+          strategy="lazyOnload"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+              })(window,document,'script','dataLayer','GTM-5ZHV46X');
+            `,
+          }}
+        />
+
+        {/* Schema.org - lazyOnload since it's not render-blocking */}
         <Script
           id="schema-org-main"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: `{
-              "@context": "http://schema.org/",
-              "@type": "product",
-              "name": "scholarlyhelp",
+              "@context": "https://schema.org/",
+              "@type": "Product",
+              "name": "Scholarly Help",
               "image": "./img/logonew.svg",
               "aggregateRating": {
                 "@type": "AggregateRating",
@@ -68,7 +99,7 @@ export default function RootLayout({
           }}
           key="product-jsonld"
         />
-        
+
         {/* Client-side scripts that need pathname */}
         <ClientScripts />
       </body>

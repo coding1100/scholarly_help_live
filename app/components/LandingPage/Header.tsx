@@ -228,7 +228,7 @@ export default function Header() {
           <Image
             src={LogoSmall}
             alt="Scholarly Help Logo"
-            className="max-[480px]:block hidden max-w-[30px] min-w-[30px]"
+            className="max-[480px]:block hidden max-w-[32px] min-w-[29px]"
             width={30}
             height={30}
             priority

@@ -1,23 +1,64 @@
 import MainLayout from "./MainLayout";
 import HeroSection from "./components/LandingPage/HeroSection";
-import WhySlider from "./components/LandingPage/WhySlider";
-import ProcessSection from "./components/LandingPage/ProcessSection";
-import Success from "./components/LandingPage/Success";
-import AcademicPartners from "./components/LandingPage/AcademicPartners";
-import Faq from "./components/LandingPage/Faq";
-import CustomerReviews from "./components/LandingPage/CustomerReviews";
-import CardCarousel from "./components/LandingPage/CardCarousel";
-import GuaranteedBlock from "./components/LandingPage/GuaranteedBlock";
-import Description from "./components/LandingPage/Description";
 import Ratings from "./components/LandingPage/Ratings";
 import { HomeDataProvider } from "./(pages)/HomeDataProvider";
 import dynamicImport from "next/dynamic";
 import { getHomeData } from "./lib/mongodb";
 
-// Lazy load below-the-fold components
+// Skeleton component for loading states
+const LoadingSkeleton = ({ height = "400px" }: { height?: string }) => (
+  <div className="w-full animate-pulse bg-gray-100" style={{ minHeight: height }} />
+);
+
+// Lazy load ALL below-the-fold components to reduce initial JS
+const WhySlider = dynamicImport(() => import("./components/LandingPage/WhySlider"), {
+  loading: () => <LoadingSkeleton height="500px" />,
+  ssr: true, // Keep SSR for SEO but load JS lazily
+});
+
+const CardCarousel = dynamicImport(() => import("./components/LandingPage/CardCarousel"), {
+  loading: () => <LoadingSkeleton height="600px" />,
+  ssr: false, // Heavy slider - no SSR needed
+});
+
+const Description = dynamicImport(() => import("./components/LandingPage/Description"), {
+  loading: () => <LoadingSkeleton height="300px" />,
+  ssr: true,
+});
+
+const GuaranteedBlock = dynamicImport(() => import("./components/LandingPage/GuaranteedBlock"), {
+  loading: () => <LoadingSkeleton height="400px" />,
+  ssr: true,
+});
+
+const CustomerReviews = dynamicImport(() => import("./components/LandingPage/CustomerReviews"), {
+  loading: () => <LoadingSkeleton height="500px" />,
+  ssr: false, // Heavy slider component
+});
+
+const ProcessSection = dynamicImport(() => import("./components/LandingPage/ProcessSection"), {
+  loading: () => <LoadingSkeleton height="400px" />,
+  ssr: true,
+});
+
+const Success = dynamicImport(() => import("./components/LandingPage/Success"), {
+  loading: () => <LoadingSkeleton height="300px" />,
+  ssr: true,
+});
+
+const AcademicPartners = dynamicImport(() => import("./components/LandingPage/AcademicPartners"), {
+  loading: () => <LoadingSkeleton height="200px" />,
+  ssr: true,
+});
+
 const GetQouteDynamic = dynamicImport(() => import("./components/LandingPage/GetQoute"), { 
   ssr: false,
-  loading: () => <div className="min-h-[400px]" />
+  loading: () => <LoadingSkeleton height="400px" />
+});
+
+const Faq = dynamicImport(() => import("./components/LandingPage/Faq"), {
+  loading: () => <LoadingSkeleton height="400px" />,
+  ssr: true,
 });
 
 // Enable ISR with 60 second revalidation for fast TTFB
@@ -32,10 +73,10 @@ const Home = async () => {
       <MainLayout>
         <HeroSection />
         <Ratings />
-        <WhySlider />
         <CardCarousel />
         <Description />
         <GuaranteedBlock />
+        <WhySlider />
         <CustomerReviews />
         <ProcessSection />
         <Success />

@@ -2,10 +2,8 @@
 
 import React, { FC } from "react";
 import Image, { StaticImageData } from "next/image";
-import dynamic from "next/dynamic";
+import HeroForm from "./HeroForm"; // Direct import for LCP - no dynamic loading
 import Illustration from "@/app/assets/Images/Hero-Group-195.png";
-
-const HeroForm = dynamic(() => import("./HeroForm"), { ssr: false });
 import Bg1 from "@/app/assets/Images/Hero-b-1.png";
 import Bg2 from "@/app/assets/Images/Hero-b-2.png";
 import Bg3 from "@/app/assets/Images/Hero-b-3.png";
