@@ -391,7 +391,6 @@ const MainDocEditor: React.FC<MainDocEditorProps> = ({
         isOpen={isPromptModalOpen}
         onClose={() => setPromptModalOpen(false)}
         onStartWriting={onStartWriting}
-        setOutlineResponse={setOutlineResponse}
       />
     </div>
   );
