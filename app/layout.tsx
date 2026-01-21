@@ -2,7 +2,6 @@ import { Poppins } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { Metadata } from "next";
-import ClientScripts from "./components/ClientScripts";
 
 // Optimize font loading - next/font self-hosts fonts (NO CDN calls)
 const poppins = Poppins({
@@ -100,8 +99,6 @@ export default function RootLayout({
           key="product-jsonld"
         />
 
-        {/* Client-side scripts that need pathname */}
-        <ClientScripts />
       </body>
     </html>
   );

@@ -1,16 +1,17 @@
 "use client";
-import React, { useEffect } from "react";
-import dynamic from "next/dynamic";
-import AppNav from "@/app/components/NavBar/AppNav";
+import React from "react";
 import ThankYou from "@/app/components/ThankYou/ThankYou";
 import MainLayout from "@/app/MainLayout";
+import ClientScripts from "@/app/components/ClientScripts";
 
-const page = () => {
+const Page = () => {
   return (
     <MainLayout>
       <ThankYou />
+      {/* Load chat widget scripts only on thank-you page */}
+      <ClientScripts />
     </MainLayout>
   );
 };
 
-export default page;
+export default Page;
