@@ -88,7 +88,7 @@ export default function RootLayout({
               "@context": "https://schema.org/",
               "@type": "Product",
               "name": "Scholarly Help",
-              "image": "./img/logonew.svg",
+              "image": "/images/logo.png",
               "aggregateRating": {
                 "@type": "AggregateRating",
                 "ratingValue": "4.9",
