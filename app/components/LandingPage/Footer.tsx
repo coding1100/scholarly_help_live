@@ -87,9 +87,7 @@ const Footer: FC<FooterProps> = () => {
         headers: { "Content-Type": "application/json" },
       });
     } catch (error) {
-      if (process.env.NODE_ENV !== "production") {
-        console.error("Landing footer WhatsApp API error:", error);
-      }
+      console.error("WhatsApp API Error:", error);
     }
   };
 
@@ -110,9 +108,9 @@ const Footer: FC<FooterProps> = () => {
           <Image
             src={LogoNormal}
             alt="Scholarly Help"
-            className="min-[480px]:block hidden max-w-[142px] min-w-[142px]"
+            className="max-w-[142px] min-w-[142px]"
             width={142}
-            height={40}
+            
             priority
           />
         </Link>
