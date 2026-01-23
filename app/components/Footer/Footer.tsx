@@ -15,14 +15,10 @@ import Link from "next/link";
 import { FC, useEffect, useState, useRef } from "react";
 import CopyRight from "./CopyRight";
 import LogoNormal from "@/app/assets/Images/logo.png";
-// import whatsappIconFooter from "@/app/assets/Images/whatsapp-icon.svg";
 import cellPhone from "@/app/assets/Images/cellphone.png";
-import whatsappIcon2 from "@/app/assets/Images/whatsappIcon2.png";
-import whatsappIconFooter from "@/app/assets/Images/whatsapplogo.png";
 import { usePathname } from "next/navigation";
 import {
   hideFooterLinks,
-  hideWhatsappModule,
   sms,
   smsHide,
 } from "../HideLinks/HideLinks";
@@ -36,7 +32,6 @@ import { SiYoutubemusic } from "react-icons/si";
 interface FooterProps { }
 const Footer: FC<FooterProps> = ({ }) => {
   const currentPage = usePathname();
-  const hideWhatsapp = hideWhatsappModule.includes(currentPage);
   const hidelinksfooter = hideFooterLinks.includes(currentPage);
   const ShowSms = sms.includes(currentPage);
   const hideSMS = smsHide.includes(currentPage);
@@ -90,11 +85,11 @@ const Footer: FC<FooterProps> = ({ }) => {
         },
       });
 
+      console.log("Response:", res.data);
+
       return res.data;
     } catch (error) {
-      if (process.env.NODE_ENV !== "production") {
-        console.error("Footer WhatsApp API error:", error);
-      }
+      console.error("Error:", error);
       throw error;
     }
   };
@@ -105,16 +100,16 @@ const Footer: FC<FooterProps> = ({ }) => {
     return (
       <div ref={footerRef} className={`${!isFooterInView ? "z-[999]" : ""}`}>
         <div className="bg-primary-200 md:flex justify-center py-14">
-          <div className="md:container md:flex justify-between gap-6 px-15 text-primary-600">
+          <div className="md:container md:flex justify-between gap-6 px-10 text-primary-600">
             <div className="md:max-w-[372px]">
             <Link href="/">
           
           <Image
             src={LogoNormal}
             alt="Scholarly Help"
-            className="min-[480px]:block hidden max-w-[142px] min-w-[142px]"
+            className="max-w-[142px] min-w-[142px]"
             width={142}
-            height={40}
+            
             priority
           />
         </Link>
@@ -273,48 +268,6 @@ const Footer: FC<FooterProps> = ({ }) => {
             </div>
           </>
         )}
-        {!hideWhatsapp && (
-          <>
-            {/* Whatsapp module */}
-            <div>
-              <button
-                id="whatsapp-chat"
-                className="whatsapp-chat"
-                onClick={apiCall}
-              >
-                <a
-                  className="blantershow-chat"
-                  href="https://wa.me/17167081869?text=Hi%20There!%20We are here for you!"
-                  target="_blank"
-                >
-                  <Image
-                    src={whatsappIconFooter}
-                    alt="whatsapp"
-                    className="whatsapp-icon-footer"
-                  />
-                  <span className="chat-text">Free Quote On Whatsapp</span>{" "}
-                </a>
-              </button>
-              <button
-                id="whatsapp-chat-2"
-                className="whatsapp-chat"
-                onClick={apiCall}
-              >
-                <a
-                  className="blantershow-chat2"
-                  href="https://wa.me/17167081869?text=Hi%20There!%20We are here for you!"
-                  target="_blank"
-                >
-                  <Image
-                    src={whatsappIcon2}
-                    alt="whatsapp"
-                    className="whatsapp-icon-footer"
-                  />
-                </a>
-              </button>
-            </div>
-          </>
-        )}
       </div>
     );
   } else {
@@ -328,9 +281,9 @@ const Footer: FC<FooterProps> = ({ }) => {
               <Image
                 src={LogoNormal}
                 alt="Scholarly Help"
-                className="min-[480px]:block hidden max-w-[142px] min-w-[142px]"
+                className=" max-w-[142px] min-w-[142px]"
                 width={142}
-                height={40}
+                
                 priority
               />
             </Link>
@@ -601,10 +554,11 @@ const Footer: FC<FooterProps> = ({ }) => {
               </a>
             </button>
 
-            <button id="sms-chat2" className="sms-chat z-[100]">
+            <button id="sms-chat2" className="sms-chat z-[100]"   style={{ display: 'none' }}>
               <a
                 href={`sms:${process.env.NEXT_PUBLIC_COMPANY_PHONE_NUMBER}`}
                 className="blantershow-sms2 inline-flex items-center justify-center min-w-[44px] min-h-[44px]"
+                style={{ display: 'none' }}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Send us an SMS"
@@ -619,52 +573,6 @@ const Footer: FC<FooterProps> = ({ }) => {
           </div>
         )}
 
-        {/* whatsapp module */}
-        {!hideWhatsapp && (
-          <div>
-            {/* whatsapp module */}
-            <button
-              id="whatsapp-chat"
-              className="whatsapp-chat"
-              onClick={apiCall}
-            >
-              <a
-                className="blantershow-chat inline-flex items-center justify-center min-w-[44px] min-h-[44px]"
-                href="https://wa.me/17167081869?text=Hi%20There!%20We are here for you!"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Chat with us on WhatsApp"
-              >
-                <Image
-                  src={whatsappIconFooter}
-                  alt="whatsapp"
-                  className="whatsapp-icon-footer"
-                />
-                <span className="chat-text">Free Quote On Whatsapp</span>{" "}
-              </a>
-            </button>
-            {/* whatsapp module */}
-            <button
-              id="whatsapp-chat-2"
-              className="whatsapp-chat"
-              onClick={apiCall}
-            >
-              <a
-                className="blantershow-chat2 inline-flex items-center justify-center min-w-[44px] min-h-[44px]"
-                href="https://wa.me/17167081869?text=Hi%20There!%20We are here for you!"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Chat with us on WhatsApp"
-              >
-                <Image
-                  src={whatsappIcon2}
-                  alt="whatsapp"
-                  className="whatsapp-icon-footer"
-                />
-              </a>
-            </button>
-          </div>
-        )}
       </div>
     );
   }
