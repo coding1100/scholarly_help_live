@@ -8,7 +8,7 @@ import { IoChatbubbles } from "react-icons/io5";
 import { MdPhoneInTalk } from "react-icons/md";
 import { ClipLoader } from "react-spinners";
 import Image, { StaticImageData } from "next/image";
-import FormBackImg from "@/app/assets/Images/Hero-Group-195.png";
+import FormBackImg from "@/app/assets/Images/Hero-Group-195.webp";
 import { usePageData } from "./usePageData";
 
 interface ZohoForm2Props {
@@ -294,18 +294,16 @@ const HeroForm: FC<ZohoForm2Props> = ({
             width={526}
             height={551}
             className="min-[1200px]:max-w-[450px] max-w-[450px] cus-img absolute min-[1200px]:right-[-280px] min-[1200px]:top-[-83px] -z-[1] max-[1025px]:hidden min-[1000px]:right-[-272px] min-[1000px]:top-[-83px]"
-            sizes="(min-width: 1200px) 450px, (min-width: 1025px) 450px, 0px"
             priority
             fetchPriority="high"
           />
         ) : (
           <Image
-            src="/images/Hero-Group-195.png"
+            src="/images/Hero-Group-195.webp"
             alt="Academic success illustration"
             width={526}
             height={551}
             className="cus-img absolute min-[1200px]:right-[-258px] -z-[1] max-[1025px]:hidden min-[1100px]:right-[-208px] min-[1150px]:right-[-150px]"
-            sizes="(min-width: 1200px) 450px, (min-width: 1025px) 450px, 0px"
             priority
             fetchPriority="high"
           />
@@ -521,18 +519,16 @@ const HeroForm: FC<ZohoForm2Props> = ({
           width={526}
           height={551}
           className="min-[1200px]:max-w-[450px] max-w-[450px] cus-img absolute min-[1200px]:right-[-280px] min-[1200px]:top-[-83px] -z-[1] max-[1025px]:hidden min-[1000px]:right-[-272px] min-[1000px]:top-[-120px]"
-          sizes="(min-width: 1200px) 450px, (min-width: 1025px) 450px, 0px"
           priority
           fetchPriority="high"
         />
       ) : (
         <Image
-          src="/images/Hero-Group-195.png"
+          src="/images/Hero-Group-195.webp"
           alt="Academic success illustration"
           width={526}
           height={551}
           className="cus-img absolute min-[1200px]:right-[-258px] -z-[1] max-[1025px]:hidden min-[1100px]:right-[-208px] min-[1150px]:right-[-150px]"
-          sizes="(min-width: 1200px) 450px, (min-width: 1025px) 450px, 0px"
           priority
           fetchPriority="high"
         />
@@ -579,16 +575,16 @@ const HeroForm: FC<ZohoForm2Props> = ({
           </div>
 
           {/* Instructions Field */}
-          <div className="flex items-start border rounded-md bg-[#EDEFFE] border-[#E3E5F3] max-[768px]:bg-[#F5F6FA] px-4 pt-3 pb-2 min-h-[150px] max-[768px]:relative">
+          <div className="flex items-start border rounded-md bg-[#EDEFFE] border-[#E3E5F3] h-[65px] max-[768px]:bg-[#F5F6FA] px-4 pt-3 pb-2 min-[768px]:min-h-[150px] max-[768px]:relative">
             <textarea
               id="Description"
               name="Description"
               placeholder="What do you need help with? *"
-              rows={textAreaRows}
+              rows={4}
               value={formData.Description}
               onChange={handleChange}
               required
-              className="flex-1 bg-transparent text-black outline-none resize-none text-sm placeholder:text-[#6B7280] pr-3 bg-[#EDEFFE] min-h-[150px]"
+              className="flex-1 bg-transparent text-black outline-none resize-none text-sm pr-3 bg-[#EDEFFE] min-[768px]:min-h-[100px] max-[768px]:h-[50px]"
             />
             <div className="absolute top-[15px] right-[50px] w-[2px] h-[20px] bg-gray-200 min-[768px]:hidden"></div>
             <IoChatbubbles className="text-[#9ea9bf] text-xl mt-1 flex-shrink-0" />
